@@ -6,24 +6,10 @@ from langchain.agents import create_agent
 from langchain_core.tools import tool
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_openai import ChatOpenAI
-from tavily import TavilyClient
+from langchain_tavily import TavilySearch
 
-tavily = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
-
-@tool
-def search(query:str) -> str:
-    """
-    Search the web for information
-    Args:
-        query: The query to search for
-    Returns:
-        The search results
-    """
-    print(f"Searching the web for {query}")
-    return tavily.search(query)
-
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-tools = [search]
+llm = ChatOpenAI(model="gpt-5", temperature=0)
+tools = [TavilySearch()]
 agent = create_agent(model=llm, tools=tools)
 
 def main():
